@@ -6,10 +6,26 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    alert('Login coming soon!');
-  };
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await response.json();
+    if (data.success) {
+      localStorage.setItem('user', JSON.stringify(data.user));
+      alert('Login ho gaya! Welcome ' + data.user.name + ' 🎉');
+      navigate('/dashboard');
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    alert('Server se connection nahi ho raha. Backend chalu hai?');
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
