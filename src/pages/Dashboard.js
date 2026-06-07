@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const { language, toggleLanguage, t } = useLanguage();
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -21,91 +23,117 @@ function Dashboard() {
 
   if (!user) return null;
 
+  const cards = [
+    {
+      icon: '💼',
+      titleKey: 'add_skill',
+      descKey: 'add_skill_desc',
+      btnColor: 'bg-purple-600 hover:bg-purple-700',
+      borderColor: 'border-l-purple-500',
+      action: () => navigate('/add-skill')
+    },
+    {
+      icon: '🔍',
+      titleKey: 'browse_skills',
+      descKey: 'browse_desc',
+      btnColor: 'bg-blue-500 hover:bg-blue-600',
+      borderColor: 'border-l-blue-500',
+      action: () => navigate('/browse')
+    },
+    {
+      icon: '📋',
+      titleKey: 'my_orders',
+      descKey: 'orders_desc',
+      btnColor: 'bg-green-500 hover:bg-green-600',
+      borderColor: 'border-l-green-500',
+      action: () => {}
+    },
+    {
+      icon: '💰',
+      titleKey: 'my_earnings',
+      descKey: 'earnings_desc',
+      borderColor: 'border-l-yellow-500',
+      isEarnings: true
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
 
       {/* Navbar */}
-      <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-purple-600">Pocket Kharcha 🎯</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-gray-600">Namaste, <strong>{user.name}</strong> 👋</span>
+      <nav className="bg-white shadow-sm px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <h1 className="text-xl md:text-2xl font-bold text-purple-600">Pocket Kharcha 🎯</h1>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-1 bg-gray-100 hover:bg-purple-100 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium transition border border-gray-200">
+            {language === 'en' ? '🇮🇳 हिंदी' : '🇬🇧 English'}
+          </button>
+          <span className="text-gray-600 text-sm hidden md:block">
+            {language === 'en' ? 'Hello' : 'नमस्ते'}, <strong>{user.name}</strong> 👋
+          </span>
           <button
             onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-          >
-            Logout
+            className="bg-red-500 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-red-600 text-sm">
+            {t('logout')}
           </button>
         </div>
       </nav>
 
-{/* Banner */}
-<div className="bg-purple-600 text-white px-8 py-10">
-  <h2 className="text-3xl font-bold mb-2">Welcome, {user.name}! 🎉</h2>
-  <p className="text-purple-200 text-lg">Skill becho, skill hire karo — sab ek jagah!</p>
-</div>
+      {/* Welcome Banner */}
+      <div className="bg-purple-600 text-white px-4 md:px-8 py-8 md:py-10">
+        <h2 className="text-2xl md:text-3xl font-bold mb-2">
+          {t('welcome')}, {user.name}! 🎉
+        </h2>
+        <p className="text-purple-200 text-base md:text-lg">
+          {t('dashboard_subtitle')}
+        </p>
+      </div>
 
-{/* Cards */}
-<div className="px-8 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Cards */}
+      <div className="px-4 md:px-8 py-6 md:py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {cards.map((card, index) => (
+          <div key={index}
+            className={`bg-white rounded-xl p-6 shadow-sm border-l-4 ${card.borderColor}`}>
+            <div className="text-3xl mb-2">{card.icon}</div>
+            <h3 className="text-lg font-bold text-gray-800">{t(card.titleKey)}</h3>
+            <p className="text-gray-500 mt-1 text-sm">{t(card.descKey)}</p>
+            {card.isEarnings ? (
+              <div className="mt-4 text-2xl font-bold text-yellow-500">₹0</div>
+            ) : (
+              <button
+                onClick={card.action}
+                className={`mt-4 ${card.btnColor} text-white px-4 py-2 rounded-lg w-full text-sm transition`}>
+                {t(card.titleKey)}
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
 
-  <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-purple-500">
-    <div className="text-3xl mb-2">💼</div>
-    <h3 className="text-lg font-bold text-gray-800">Skill Add Karo</h3>
-    <p className="text-gray-500 mt-1 text-sm">Apni skill list karke kamao</p>
-    <button onClick={() => navigate('/add-skill')}
-      className="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 w-full text-sm">
-      Add Karo
-    </button>
-  </div>
-
-  <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-500">
-    <div className="text-3xl mb-2">🔍</div>
-    <h3 className="text-lg font-bold text-gray-800">Skills Dhundo</h3>
-    <p className="text-gray-500 mt-1 text-sm">Koi bhi skill hire karo</p>
-    <button onClick={() => navigate('/browse')}
-      className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full text-sm">
-      Browse Karo
-    </button>
-  </div>
-
-  <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-green-500">
-    <div className="text-3xl mb-2">📋</div>
-    <h3 className="text-lg font-bold text-gray-800">Mere Orders</h3>
-    <p className="text-gray-500 mt-1 text-sm">Tumhare aaye orders dekho</p>
-    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full text-sm">
-      Dekho
-    </button>
-  </div>
-
-  <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-yellow-500">
-    <div className="text-3xl mb-2">💰</div>
-    <h3 className="text-lg font-bold text-gray-800">Meri Kamai</h3>
-    <p className="text-gray-500 mt-1 text-sm">Total earnings dekho</p>
-    <div className="mt-4 text-2xl font-bold text-yellow-500">₹0</div>
-  </div>
-
-</div>
-
-      {/* Profile Info */}
-      <div className="px-8 pb-8">
+      {/* Profile */}
+      <div className="px-4 md:px-8 pb-8">
         <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Meri Profile 👤</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">{t('my_profile')} 👤</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-gray-500 text-sm">Naam</p>
+              <p className="text-gray-500 text-sm">{t('naam')}</p>
               <p className="font-semibold text-gray-800">{user.name}</p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">Email</p>
+              <p className="text-gray-500 text-sm">{t('email')}</p>
               <p className="font-semibold text-gray-800">{user.email}</p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">Phone</p>
+              <p className="text-gray-500 text-sm">{t('phone_label')}</p>
               <p className="font-semibold text-gray-800">{user.phone}</p>
             </div>
-            <div>
-              <p className="text-gray-500 text-sm">Role</p>
-              <p className="font-semibold text-purple-600 capitalize">{user.role === 'seller' ? '💼 Skill Seller' : '🛍️ Khareedaar'}</p>
-            </div>
+            {user.city && (
+              <div>
+                <p className="text-gray-500 text-sm">{t('city')}</p>
+                <p className="font-semibold text-gray-800">{user.city}{user.state ? `, ${user.state}` : ''}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
