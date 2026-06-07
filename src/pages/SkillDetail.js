@@ -10,7 +10,9 @@ function SkillDetail() {
   const { language, toggleLanguage, t } = useLanguage();
   const user = JSON.parse(localStorage.getItem('user'));
 
-  useEffect(() => { fetchSkill(); }, []);
+  useEffect(() => {
+    fetchSkill();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchSkill = async () => {
     try {

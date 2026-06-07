@@ -12,7 +12,7 @@ function Payment() {
   useEffect(() => {
     if (!user) { navigate('/login'); return; }
     fetchSkill();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchSkill = async () => {
     const response = await fetch(`http://localhost:8080/api/skills/${id}`);

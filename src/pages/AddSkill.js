@@ -15,7 +15,9 @@ function AddSkill() {
   const { language, toggleLanguage, t } = useLanguage();
   const user = JSON.parse(localStorage.getItem('user'));
 
-  useEffect(() => { if (!user) navigate('/login'); }, []);
+  useEffect(() => {
+    if (!user) navigate('/login');
+  }, [navigate, user]);
 
   const categories = {
     en: ['Makeup & Beauty','Cooking & Recipes','Art & Painting','Coding & Projects',
