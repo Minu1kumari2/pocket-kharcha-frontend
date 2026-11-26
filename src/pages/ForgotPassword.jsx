@@ -1,3 +1,4 @@
+import { API_URL } from '../utils/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -16,7 +17,7 @@ function ForgotPassword() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      const response = await fetch(`${API_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -41,7 +42,7 @@ function ForgotPassword() {
     if (newPassword.length < 6) { alert(t('password_too_short')); return; }
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/auth/reset-password', {
+      const response = await fetch(`${API_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, newPassword })
