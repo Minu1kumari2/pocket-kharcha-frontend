@@ -1,3 +1,4 @@
+import { API_URL } from '../utils/api';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -16,7 +17,7 @@ function SkillDetail() {
 
   const fetchSkill = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/skills/${id}`);
+      const response = await fetch(`${API_URL}/api/skills/${id}`);
       const data = await response.json();
       setSkill(data);
     } catch (error) {
