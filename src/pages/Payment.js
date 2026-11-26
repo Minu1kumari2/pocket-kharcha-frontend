@@ -1,3 +1,4 @@
+import { API_URL } from '../utils/api';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -15,7 +16,7 @@ function Payment() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchSkill = async () => {
-    const response = await fetch(`http://localhost:8080/api/skills/${id}`);
+    const response = await fetch(`${API_URL}/api/skills/${id}`);
     const data = await response.json();
     setSkill(data);
   };
