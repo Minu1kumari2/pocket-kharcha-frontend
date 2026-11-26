@@ -1,3 +1,4 @@
+import { API_URL } from '../utils/api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -48,7 +49,7 @@ function BrowseSkills() {
 
   const fetchSkills = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/skills');
+      const response = await fetch(`${API_URL}/api/skills`);
       const data = await response.json();
       setSkills(data);
     } catch (error) {
