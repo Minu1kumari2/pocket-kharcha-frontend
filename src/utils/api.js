@@ -1,4 +1,7 @@
-const API_URL = process.env.REACT_APP_API_URL || 'https://pocket-kharcha-backend-1.onrender.com';
+
+export const API_URL =
+  process.env.REACT_APP_API_URL ||
+  'http://localhost:8080';
 
 export const api = {
   post: async (endpoint, data) => {
