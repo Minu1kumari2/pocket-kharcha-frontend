@@ -1,3 +1,4 @@
+import { API_URL } from '../utils/api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -54,7 +55,7 @@ function AddSkill() {
         sellerEmail: user.email, sellerPhone: user.phone,
         sellerCity: user.city || ''
       };
-      const response = await fetch('http://localhost:8080/api/skills', {
+      const response = await fetch(`${API_URL}/api/skills`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(skillData)
